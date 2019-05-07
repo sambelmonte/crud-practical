@@ -9,10 +9,13 @@ module.exports = {
         callback({success: true, data: results});
       }
     });
+  },
+  create_item: function(variables, values, callback){
+    sql.query("INSERT INTO items (" + variables + ") VALUES (" + values + ");", function(error, results, fields){
+      if (error) callback({success: false, data: null});
+      else callback({success: true, data: {id : results.insertId}});
+    });
   }//,
-  // create_item: function(body){
-  //
-  // },
   // update_item: function(body){
   //
   // },
