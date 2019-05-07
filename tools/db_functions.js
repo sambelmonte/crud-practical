@@ -15,11 +15,18 @@ module.exports = {
       if (error) callback({success: false, data: null});
       else callback({success: true, data: {id : results.insertId}});
     });
-  }//,
-  // update_item: function(body){
-  //
-  // },
-  // delete_item: function(id){
-  //
-  // }
+  },
+  update_item: function(id, values, callback){
+    sql.query("UPDATE items SET " + values + " WHERE id = " + id, function(error, results, fields){
+      if (error) callback({success: false, data: null});
+      if (results.affectedRows == 0) callback({success: true, data: {updated: false}});
+      else callback({success: true, data: {updated: true}});
+    });
+  },
+  delete_item: function(id, callback){
+    sql.query("DELETE FROM items WHERE id = " + id, function(error, results, fields){
+      if (error) callback({success: false, data: null});
+      else callback({success: true, data: null});
+    });
+  }
 };

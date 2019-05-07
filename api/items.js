@@ -69,4 +69,81 @@ router.post('/new', function(req, res){
   }
 });
 
+router.put('/update', function(req, res){
+  if (req.body.id){
+    let new_data = [];
+    let errors = [];
+    if (req.body.name){
+      new_data.push("name = '" + req.body.name + "'");
+    }
+    if (req.body.qty){
+      if (!isNaN(parseInt(req.body.qty))){
+        new_data.push("qty = '" + req.body.qty + "'")
+      } else {
+        errors.push("Qty should be a number.");
+      }
+    }
+    if (req.body.amount){
+      if (!isNaN(parseInt(req.body.amount))){
+        new_data.push("amount = '" + req.body.amount + "'")
+      } else {
+        errors.push("Amount should be a number.");
+      }
+    }
+    if (errors.length < 1){
+      if (new_data.length > 0){
+        db.update_item(req.body.id, new_data.join(", "), function(results){
+          if (results.success){
+            if (results.data.updated){
+              res.status(200)
+                .json({
+                  message: "Item updated successfully."
+                });
+            } else {
+              res.status(404)
+                .json({
+                  message: "The item does not exist."
+                });
+            }
+          } else {
+              res.status(500).end();
+          }
+        });
+      } else {
+        res.status(400)
+          .json({
+            message: "Nothing to update."
+          });
+      }
+    } else {
+      res.status(400)
+        .json({
+          message: errors.join(" ")
+        });
+    }
+  } else {
+    res.status(400)
+      .json({
+        message: "Id is required."
+      });
+  }
+});
+
+router.delete('/', function(req, res){
+  if (req.query.id){
+    db.delete_item(req.query.id, function(results){
+      if (results.success){
+        res.status(200)
+          .json({
+            message: "Item removed successfully."
+          });
+      } else {
+        res.status(500).end();
+      }
+    });
+  } else {
+    res.status(404).end();
+  }
+});
+
 module.exports = router;
