@@ -129,6 +129,50 @@ router.put('/update', function(req, res){
   }
 });
 
+router.put('/quantity', function(req, res){
+  let errors = [];
+  let deduct = true; // subtract by default
+  if (!req.body.id){
+    errors.push("ID is missing.");
+  }
+  if (!req.body.value){
+    errors.push("Value is missing.");
+  } else if (isNaN(parseInt(req.body.value))){
+    errors.push("Value should be a number.");
+  } else if (parseInt(req.body.value) == 0){
+    errors.push("Value should be greated than 0.");
+  }
+  if (req.body.add){
+    deduct = false;
+  }
+
+  if (errors.length < 1){
+    let new_query = "qty = qty " + (deduct? "-" : "+") + req.body.value;
+    db.update_item(req.body.id, new_query, function(results){
+      if (results.success){
+        if (results.data.updated){
+          res.status(200)
+            .json({
+              message: "Item updated successfully."
+            });
+        } else {
+          res.status(404)
+            .json({
+              message: "The item does not exist."
+            });
+        }
+      } else {
+          res.status(500).end();
+      }
+    });
+  } else {
+    res.status(400)
+      .json({
+        message: errors.join(" ")
+      });
+  }
+});
+
 router.delete('/', function(req, res){
   if (req.query.id){
     db.delete_item(req.query.id, function(results){
