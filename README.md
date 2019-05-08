@@ -40,9 +40,9 @@ Creates a single new item.
 Sample Body:
 ```
 {
-	"name": "Roller Blades",
-	"qty": 2,
-	"amount": 5000
+  "name": "Roller Blades",
+  "qty": 2,
+  "amount": 5000
 }
 ```
 
@@ -59,10 +59,10 @@ Updates the details of a single item.
 Sample Body:
 ```
 {
-  "id": 15
-	"name": "Roller Blades",
-	"qty": 2,
-	"amount": 5000
+  "id": 15,
+  "name": "Brand New Roller Blades",
+  "qty": 2,
+  "amount": 5000
 }
 ```
 
@@ -79,9 +79,9 @@ Updates the quantity of a single item.
 Sample Body:
 ```
 {
-	"id": 15,
-	"value": 2,
-	"add": false
+  "id": 15,
+  "value": 2,
+  "add": false
 }
 ```
 
