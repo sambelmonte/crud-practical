@@ -1,8 +1,12 @@
 const sql = require('./db');
 
 module.exports = {
-  get_item_by_value: function (data, callback){
-    sql.query("SELECT id, name, qty, amount FROM items WHERE " + data, function(error, results, fields){
+  get_items: function (data, callback){
+    let new_query = "SELECT id, name, qty, amount FROM items";
+    if (data){
+      new_query += " WHERE " + data;
+    }
+    sql.query(new_query, function(error, results, fields){
       if (error) callback({success: false, data: null});
       if (results.length < 1) callback({success: true, data: null});
       else {
